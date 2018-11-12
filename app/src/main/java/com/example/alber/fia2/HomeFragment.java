@@ -2,8 +2,13 @@ package com.example.alber.fia2;
 
 
 import android.content.Context;
+
+import android.content.Intent;
+
 import android.content.SharedPreferences;
+
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,7 +18,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+
 import static android.content.Context.MODE_PRIVATE;
+
 
 
 /**
@@ -21,7 +28,11 @@ import static android.content.Context.MODE_PRIVATE;
  */
 public class HomeFragment extends Fragment {
 
+
+    public FloatingActionButton fab;
+
     private SharedPreferences.Editor editor;
+
 
 
     public HomeFragment() {
@@ -32,19 +43,20 @@ public class HomeFragment extends Fragment {
 
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        //Toast.makeText(this.getContext(),"Incorrecto",Toast.LENGTH_SHORT).show();
-        //SharedPreferences preferences = this.getActivity().getSharedPreferences("SHARED PREFERENCES",0);
-        //preferences.getString("user_id");
 
-
-        return inflater.inflate(R.layout.fragment_home, container, false);
-
-
+        View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+        fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "mensaje", Toast.LENGTH_SHORT).show();
+            }
+        });
+        return rootView;
 
     }
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
