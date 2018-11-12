@@ -1,6 +1,7 @@
 package com.example.alber.fia2;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,11 +26,16 @@ public class Login extends AppCompatActivity {
     FirebaseAuth.AuthStateListener listener;
     Intent intent;
 
+    private SharedPreferences.Editor editor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+         editor = getSharedPreferences("SHARED PREFERENCES", MODE_PRIVATE).edit();
+
 
         Textemail = findViewById(R.id.correo);
         Textpass = findViewById(R.id.password);
@@ -75,7 +81,11 @@ public class Login extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
-                        Toast.makeText(getApplicationContext(),"Correcto",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),task.getResult().getUser().getUid(),Toast.LENGTH_SHORT).show();
+                        editor.putString("id_user", task.getResult().getUser().getUid());
+                        editor.apply();
+
+                        //Toast.makeText(getApplicationContext(),"Correcto",Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent (getApplication(),MainActivity.class);
                         startActivity(intent);
                     }
