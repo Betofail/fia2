@@ -82,7 +82,7 @@ public class Login extends AppCompatActivity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
                         Toast.makeText(getApplicationContext(),task.getResult().getUser().getUid(),Toast.LENGTH_SHORT).show();
-                        editor.putString("id_user", task.getResult().getUser().getUid());
+                        editor.putString("user_id", task.getResult().getUser().getUid());
                         editor.apply();
 
                         //Toast.makeText(getApplicationContext(),"Correcto",Toast.LENGTH_SHORT).show();
