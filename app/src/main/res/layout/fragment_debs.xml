@@ -7,10 +7,10 @@
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/texto_prueba"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|center_vertical"
-        android:textSize="50dp"
-        android:text="@string/deudores" />
+        android:text="none"/>
 
 </FrameLayout>
