@@ -5,29 +5,50 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class SalesFragment extends Fragment {
 
-    private Button searchButton;
+    private LinearLayout searchLayout;
+
+    private Button searchButton, selectClient;
     private EditText searchField;
-    private RecyclerView clientsFoundList;
+
+    private FirebaseFirestore db;
     private DatabaseReference clientsDatabase;
+    private CollectionReference clientsReference;
+
+    private TextView name, lastName, rut;
+
+    private static final String TAG = "GETTING CLIENT BY RUT";
+
+    private boolean userFound=false;
+
+
 
 
     public SalesFragment() {
@@ -39,80 +60,75 @@ public class SalesFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_sales, container, false);
 
+        searchLayout = rootView.findViewById(R.id.search_layout);
+
         searchField = rootView.findViewById(R.id.search_client_field);
         searchButton = rootView.findViewById(R.id.search_client);
+        selectClient = rootView.findViewById(R.id.select_client_button);
 
-        clientsFoundList = rootView.findViewById(R.id.search_clients_list);
-        clientsFoundList.setHasFixedSize(true);
-        clientsFoundList.setLayoutManager(new LinearLayoutManager(getContext()));
+        name = rootView.findViewById(R.id.find_name);
+        lastName = rootView.findViewById(R.id.find_last_name);
+        rut = rootView.findViewById(R.id.find_rut);
 
-        clientsDatabase = FirebaseDatabase.getInstance().getReference("clients");
+        db = FirebaseFirestore.getInstance();
+        clientsReference = db.collection("clients");
 
         searchButton.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view){
                 String searchText = searchField.getText().toString();
-                Toast.makeText(getContext(),"Buscando Usuario",Toast.LENGTH_SHORT).show();
-                //firebaseUserSearch(searchText);
+
+                Query clientsQuery = clientsReference.whereEqualTo("rut",searchText);
+
+
+                clientsQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+
+                            //showToast("Buscando cliente");
+
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, "CLIENTE ENCONTRADO" + " => " + document.getData());
+                                name.setText(document.getString("nombre"));
+                                lastName.setText(document.getString("apellido"));
+                                rut.setText(document.getString("rut"));
+
+                                userFound = true;
+
+                            }
+                        }
+                        else{
+                            showToast("Usuario no encontrado");
+                            userFound = false;
+                        }
+                    }
+                });
+
             }
         });
+
+        selectClient.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(userFound == true)
+                searchLayout.setVisibility(View.GONE);
+                else
+                    showToast("Seleccione un cliente primero");
+            }
+        });
+
+
 
         return rootView;
     }
 
-    /*private void firebaseUserSearch(String name) {
-
-        Query firebaseSearchQuery = clientsDatabase.orderByChild("nombre").startAt(name).endAt(name + "\uf8ff");
-
-        FirebaseRecyclerAdapter<Clients, ClientsViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Clients, ClientsViewHolder>(
-
-                Clients.class,
-                R.layout.fragment_sales,
-                ClientsViewHolder.class,
-                firebaseSearchQuery
-
-        ) {
-            @Override
-            protected void populateViewHolder(ClientsViewHolder viewHolder, Clients model, int position) {
-
-
-                viewHolder.setDetails(getContext(), model.getName());
-
-            }
-        };
-
-        clientsFoundList.setAdapter(firebaseRecyclerAdapter);
-
-    }*/
-
-    //---------------------------------------------------------------------------------------------//
-
-    public static class ClientsViewHolder extends RecyclerView.ViewHolder {
-
-        View mView;
-
-        public ClientsViewHolder(View itemView) {
-            super(itemView);
-
-            mView = itemView;
-
-        }
-
-        public void setDetails(Context ctx, String name){
-
-            //TextView user_name = mView.findViewById(R.id.name_text);
-            //TextView user_status = (TextView) mView.findViewById(R.id.status_text);
-
-            //user_name.setText(userName);
-            //user_status.setText(userStatus);
-
-        }
-
-
-
-
+    public void showToast(String message){
+        Toast.makeText(getContext(),message,Toast.LENGTH_LONG).show();
     }
+
+
 
 
 }

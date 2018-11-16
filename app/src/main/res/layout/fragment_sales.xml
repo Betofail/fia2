@@ -9,6 +9,7 @@
 
 
     <LinearLayout
+        android:id="@+id/search_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -40,13 +41,14 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Nombre: "
                 android:textSize="20sp"/>
 
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/find_name"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
         </LinearLayout>
@@ -57,13 +59,14 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Apellido: "
                 android:textSize="20sp"/>
 
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/find_last_name"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
         </LinearLayout>
@@ -74,18 +77,20 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Rut: "
                 android:textSize="20sp"/>
 
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/find_rut"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
         </LinearLayout>
 
         <Button
+            android:id="@+id/select_client_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Seleccionar cliente"/>
