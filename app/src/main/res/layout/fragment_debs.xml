@@ -6,11 +6,9 @@
     tools:context=".DebsFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/texto_prueba"
+    <ExpandableListView
+        android:id="@+id/debs_list_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|center_vertical"
-        android:text="none"/>
-
+        android:layout_height="wrap_content">
+    </ExpandableListView>
 </FrameLayout>
