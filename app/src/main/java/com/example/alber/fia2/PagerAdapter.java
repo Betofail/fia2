@@ -22,6 +22,8 @@ public class PagerAdapter extends FragmentPagerAdapter {
                 return new DebsFragment();
             case 2:
                 return new SalesFragment();
+            case 3:
+                return new CreateClientFragment();
             default:
                 return null;
         }

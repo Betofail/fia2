@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     TabItem tabHome;
     TabItem tabDebs;
     TabItem tabSales;
+    TabItem tabClients;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         tabHome = findViewById(R.id.home);
         tabDebs = findViewById(R.id.debs);
         tabSales = findViewById(R.id.sales);
+        tabClients = findViewById(R.id.clients);
         viewPager = findViewById(R.id.view_pager);
 
         pagerAdapter = new com.example.alber.fia2.PagerAdapter(getSupportFragmentManager(),tabLayout.getTabCount());
