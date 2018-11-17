@@ -69,7 +69,5 @@ public class HomeFragment extends Fragment {
         super.onAttach(context);
         SharedPreferences preferences = context.getSharedPreferences("SHARED PREFERENCES", 0);
         String userId = preferences.getString("user_id", "missing");
-
-        Toast.makeText(this.getContext(),userId + "USUARIO ENCONTRADO",Toast.LENGTH_SHORT).show();
     }
 }

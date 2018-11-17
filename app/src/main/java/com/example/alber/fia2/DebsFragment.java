@@ -1,46 +1,26 @@
 package com.example.alber.fia2;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.ListenerRegistration;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nullable;
-
-import static android.content.ContentValues.TAG;
 
 
 /**
@@ -48,15 +28,18 @@ import static android.content.ContentValues.TAG;
  */
 public class DebsFragment extends Fragment {
 
-
+    public Integer contador = 0;
     public View rootView;
+    public FirebaseFirestore db = FirebaseFirestore.getInstance();
+    public CollectionReference clientesRef = db.collection("clients");
+    public CollectionReference deudasRef = db.collection("Deudas");
     public List<String> listHeader;
     public HashMap<String,List<String>> hashMap;
+
 
     public DebsFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,45 +47,30 @@ public class DebsFragment extends Fragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_debs, container, false);
         initData();
-        ExpandableListView elv =  rootView.findViewById(R.id.debs_list_view);
-        elv.setAdapter(new SavedTabsListAdapter());
         return rootView;
     }
 
-    private void initData(){
-        listHeader = new ArrayList<>();
-        hashMap = new HashMap<>();
 
-        listHeader.add("Primera");
-        listHeader.add("Segunda");
 
-        List<String> dev = new ArrayList<>();
-        dev.add("Descripcion de primera");
-
-        List<String> app = new ArrayList<>();
-        app.add("Descripcion de segunda");
-
-        hashMap.put(listHeader.get(0),dev);
-        hashMap.put(listHeader.get(1),app);
-    }
-  /*  public void loadText(){
-
-        deudas.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                if (task.isSuccessful()){
-                    ArrayList lista = new ArrayList<>();
-                    for (QueryDocumentSnapshot document: task.getResult()){
-                        groups.
+    public void initData() {
+        deudasRef.whereEqualTo("id_negocio", "hWfyjMYmx4c40GxXchUE").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        listHeader = new ArrayList<>();
+                        hashMap = new HashMap<>();
+                        for (QueryDocumentSnapshot queryDocumentSnapshot: task.getResult()){
+                                listHeader.add(queryDocumentSnapshot.get("nombre").toString());
+                                List<String> dev = new ArrayList<>();
+                                dev.add(queryDocumentSnapshot.get("fecha").toString());
+                                dev.add(queryDocumentSnapshot.get("monto").toString());
+                                hashMap.put(listHeader.get(listHeader.size()-1),dev);
+                        }
+                        ExpandableListView elv =  rootView.findViewById(R.id.debs_list_view);
+                        elv.setAdapter(new SavedTabsListAdapter());
                     }
-                }
-                else{
-                    Toast.makeText(getContext(), "no se pudo realizar", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }*/
+                });
+    }
 
     public class SavedTabsListAdapter extends BaseExpandableListAdapter {
 
