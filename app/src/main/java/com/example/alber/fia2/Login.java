@@ -81,9 +81,9 @@ public class Login extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
-                        Toast.makeText(getApplicationContext(),task.getResult().getUser().getUid(),Toast.LENGTH_SHORT).show();
-                        editor.putString("user_id", task.getResult().getUser().getUid());
-                        editor.apply();
+                       // Toast.makeText(getApplicationContext(),task.getResult().getUser().getUid(),Toast.LENGTH_SHORT).show();
+                        //editor.putString("user_id", task.getResult().getUser().getUid());
+                        //editor.apply();
 
                         //Toast.makeText(getApplicationContext(),"Correcto",Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent (getApplication(),MainActivity.class);
