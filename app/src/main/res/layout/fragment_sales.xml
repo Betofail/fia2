@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".SalesFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -94,6 +95,62 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Seleccionar cliente"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/selling_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <TextView
+                android:text="welcome"
+                android:id="@+id/TextView"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true">
+            </TextView>
+
+            <RelativeLayout
+                android:id="@+id/InnerRelativeLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true" >
+
+                <com.github.aakira.expandablelayout.ExpandableLinearLayout
+                    android:id="@+id/expandableLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:orientation="vertical"
+                    app:ael_duration="400"
+                    app:ael_expanded="true"
+                    >
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:gravity="center"
+                        android:text="
+    sample.sample.sample.sample.sample.sample.sample.sample.sample.sample.\n
+    "
+
+                        android:textSize="16sp"
+                        />
+                </com.github.aakira.expandablelayout.ExpandableLinearLayout>
+
+
+
+            </RelativeLayout>
+
+        </RelativeLayout>
 
 
     </LinearLayout>

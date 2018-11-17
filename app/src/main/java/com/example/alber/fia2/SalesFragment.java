@@ -34,6 +34,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 public class SalesFragment extends Fragment {
 
     private LinearLayout searchLayout;
+    private LinearLayout sellingLayout;
 
     private Button searchButton, selectClient;
     private EditText searchField;
@@ -61,6 +62,7 @@ public class SalesFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_sales, container, false);
 
         searchLayout = rootView.findViewById(R.id.search_layout);
+        sellingLayout = rootView.findViewById(R.id.selling_layout);
 
         searchField = rootView.findViewById(R.id.search_client_field);
         searchButton = rootView.findViewById(R.id.search_client);
@@ -72,6 +74,8 @@ public class SalesFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
         clientsReference = db.collection("clients");
+
+        sellingLayout.setVisibility(View.GONE);
 
         searchButton.setOnClickListener(new View.OnClickListener(){
 
@@ -112,8 +116,10 @@ public class SalesFragment extends Fragment {
         selectClient.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(userFound == true)
-                searchLayout.setVisibility(View.GONE);
+                if(userFound == true){
+                    searchLayout.setVisibility(View.GONE);
+                    sellingLayout.setVisibility(View.VISIBLE);
+                }
                 else
                     showToast("Seleccione un cliente primero");
             }
