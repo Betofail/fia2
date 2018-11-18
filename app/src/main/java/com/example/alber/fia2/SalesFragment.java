@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.github.aakira.expandablelayout.ExpandableLinearLayout;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
@@ -35,8 +36,9 @@ public class SalesFragment extends Fragment {
 
     private LinearLayout searchLayout;
     private LinearLayout sellingLayout;
+    private ExpandableLinearLayout expandableLinearLayout;
 
-    private Button searchButton, selectClient;
+    private Button searchButton, selectClient, expandButton;
     private EditText searchField;
 
     private FirebaseFirestore db;
@@ -63,10 +65,12 @@ public class SalesFragment extends Fragment {
 
         searchLayout = rootView.findViewById(R.id.search_layout);
         sellingLayout = rootView.findViewById(R.id.selling_layout);
+        expandableLinearLayout = rootView.findViewById(R.id.expandableLayout);
 
         searchField = rootView.findViewById(R.id.search_client_field);
         searchButton = rootView.findViewById(R.id.search_client);
         selectClient = rootView.findViewById(R.id.select_client_button);
+        expandButton = rootView.findViewById(R.id.expand_button);
 
         name = rootView.findViewById(R.id.find_name);
         lastName = rootView.findViewById(R.id.find_last_name);
@@ -76,6 +80,14 @@ public class SalesFragment extends Fragment {
         clientsReference = db.collection("clients");
 
         sellingLayout.setVisibility(View.GONE);
+        //expandableLinearLayout.initLayout(); // Recalculate size of children
+
+        expandButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                expandableLinearLayout.toggle();
+            }
+        });
 
         searchButton.setOnClickListener(new View.OnClickListener(){
 
