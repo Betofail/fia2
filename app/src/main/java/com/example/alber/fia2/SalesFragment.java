@@ -32,6 +32,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+
 public class SalesFragment extends Fragment {
 
     private LinearLayout searchLayout;
@@ -50,6 +52,11 @@ public class SalesFragment extends Fragment {
     private static final String TAG = "GETTING CLIENT BY RUT";
 
     private boolean userFound=false;
+
+    private ArrayList<ProductItem> mExampleList;
+    private RecyclerView mRecyclerView;
+    private ProductAdapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
 
 
@@ -78,6 +85,17 @@ public class SalesFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
         clientsReference = db.collection("clients");
+
+        createExampleList();
+        mRecyclerView = rootView.findViewById(R.id.my_recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(getContext());
+        mAdapter = new ProductAdapter(mExampleList);
+
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
+
+
 
         sellingLayout.setVisibility(View.GONE);
         //expandableLinearLayout.initLayout(); // Recalculate size of children
@@ -128,7 +146,7 @@ public class SalesFragment extends Fragment {
         selectClient.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(userFound == true){
+                if(userFound){
                     searchLayout.setVisibility(View.GONE);
                     sellingLayout.setVisibility(View.VISIBLE);
                 }
@@ -146,7 +164,27 @@ public class SalesFragment extends Fragment {
         Toast.makeText(getContext(),message,Toast.LENGTH_LONG).show();
     }
 
-
+    private void createExampleList() {
+        mExampleList = new ArrayList<>();
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "One", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "Two", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "Three", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "Four", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "Five", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "Six", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "Seven", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "Eight", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "Nine", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "One", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "Two", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "Three", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "Four", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "Five", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "Six", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "Seven", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "Eight", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "Nine", "Line 2"));
+    }
 
 
 }
