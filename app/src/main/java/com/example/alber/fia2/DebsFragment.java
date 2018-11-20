@@ -1,6 +1,7 @@
 package com.example.alber.fia2;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -8,8 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -34,6 +37,7 @@ public class DebsFragment extends Fragment {
     public CollectionReference clientesRef = db.collection("clients");
     public CollectionReference deudasRef = db.collection("Deudas");
     public List<String> listHeader;
+    public List<String> list_rut;
     public HashMap<String,List<String>> hashMap;
 
 
@@ -59,15 +63,17 @@ public class DebsFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         listHeader = new ArrayList<>();
                         hashMap = new HashMap<>();
+                        list_rut = new ArrayList<>();
                         for (QueryDocumentSnapshot queryDocumentSnapshot: task.getResult()){
                                 listHeader.add(queryDocumentSnapshot.get("nombre").toString());
+                                list_rut.add(queryDocumentSnapshot.get("rut").toString());
                                 List<String> dev = new ArrayList<>();
                                 dev.add(queryDocumentSnapshot.get("fecha").toString());
                                 dev.add(queryDocumentSnapshot.get("monto").toString());
-                                hashMap.put(listHeader.get(listHeader.size()-1),dev);
+                                hashMap.put(listHeader.get((listHeader.size()-1)),dev);
                         }
                         ExpandableListView elv =  rootView.findViewById(R.id.debs_list_view);
-                        elv.setAdapter(new SavedTabsListAdapter());
+                        elv.setAdapter(new SavedTabsListAdapter());;
                     }
                 });
     }
@@ -82,6 +88,10 @@ public class DebsFragment extends Fragment {
         @Override
         public int getChildrenCount(int i) {
             return hashMap.get(listHeader.get(i)).size();
+        }
+
+        public String getRut(int i){
+            return list_rut.get(i);
         }
 
         @Override
@@ -112,16 +122,40 @@ public class DebsFragment extends Fragment {
         @Override
         public View getGroupView(int i, boolean b, View view, ViewGroup viewGroup) {
             String headerTitle = (String) getGroup(i);
-            view = LayoutInflater.from(rootView.getContext()).inflate(R.layout.list_group,null);
+            final String rut = getRut(i);
+            if (view == null) {
+                view = LayoutInflater.from(rootView.getContext()).inflate(R.layout.list_group, null);
+            }
             TextView textView = (TextView) view.findViewById(R.id.group_group);
             textView.setText(headerTitle);
+            Button button1 = view.findViewById(R.id.boton_cobrar);
+            Button button2 = view.findViewById(R.id.boton_agregar);
+            button1.setTag(rut);
+            button2.setTag(rut);
+            button1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(),RealizarPago.class);
+                    Button button = v.findViewById(R.id.boton_cobrar);
+                    intent.putExtra("rut",(String) button.getTag());
+                    startActivity(intent);
+                }
+            });
+            button2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(rootView.getContext(),"agregando",Toast.LENGTH_SHORT).show();
+                }
+            });
             return view;
         }
 
         @Override
         public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
             String item = (String) getChild(i,i1);
-            view = LayoutInflater.from(rootView.getContext()).inflate(R.layout.list_item,null);
+            if (view == null){
+                view = LayoutInflater.from(rootView.getContext()).inflate(R.layout.list_item,null);
+            }
             TextView textView =  view.findViewById(R.id.item_group);
             textView.setText(item);
             return view;

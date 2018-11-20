@@ -2,17 +2,15 @@ package com.example.alber.fia2;
 
 public class Deuda {
     private String Nombre;
-    private String Apellido;
+    private Integer Monto;
     private String Id_Negocio;
     private String Email;
+    private String Rut;
 
+    public void setRut(String rut){this.Rut = rut;}
 
     public void setNombre(String nombre) {
         this.Nombre = nombre;
-    }
-
-    public void setApellido(String apellido) {
-        this.Apellido = apellido;
     }
 
     public void setId_negocio(String id_negocio) {
@@ -23,19 +21,22 @@ public class Deuda {
         this.Email = email;
     }
 
-    public Deuda(String nombre, String apellido, String id_negocio, String email) {
+    public void setMonto(int monto){this.Monto = monto;}
+
+    public Deuda(String nombre, Integer monto, String id_negocio, String email, String rut) {
         this.Nombre = nombre;
-        this.Apellido = apellido;
+        this.Monto = monto;
         this.Id_Negocio = id_negocio;
         this.Email = email;
+        this.Rut = rut;
     }
 
     public Deuda(){
 
     }
 
-    public String getApellido() {
-        return Apellido;
+    public Integer getMonto() {
+        return Monto;
     }
 
     public String getNombre() {
@@ -49,4 +50,9 @@ public class Deuda {
     public String getEmail() {
         return Email;
     }
+
+    public String getRut() {
+        return Rut;
+    }
+
 }
