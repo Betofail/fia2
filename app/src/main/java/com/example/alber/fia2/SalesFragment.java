@@ -46,6 +46,7 @@ public class SalesFragment extends Fragment {
     private FirebaseFirestore db;
     private DatabaseReference clientsDatabase;
     private CollectionReference clientsReference;
+    private CollectionReference productsReference;
 
     private TextView name, lastName, rut;
 
@@ -85,15 +86,49 @@ public class SalesFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
         clientsReference = db.collection("clients");
+        productsReference = db.collection("product");
 
-        createExampleList();
         mRecyclerView = rootView.findViewById(R.id.my_recycler_view);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(getContext());
-        mAdapter = new ProductAdapter(mExampleList);
 
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
+        //-----------------------------------CARGAR PRODUCTOS--------------------------------------//
+
+        Query productsQuery = productsReference.orderBy("nombre");
+
+
+        productsQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                mExampleList = new ArrayList<>();
+
+                if(task.isSuccessful()){
+
+                    showToast("Buscando productos");
+
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Log.d(TAG, "PRODUCTO ENCONTRADO" + " => " + document.getData());
+                        mExampleList.add(
+                                new ProductItem(
+                                        R.drawable.ic_launcher_background,
+                                        document.getString("nombre"), document.getLong("precio").toString()));
+                    }
+
+                    //createExampleList();
+
+                    mRecyclerView.setHasFixedSize(true);
+                    mLayoutManager = new LinearLayoutManager(getContext());
+                    mAdapter = new ProductAdapter(mExampleList);
+
+                    mRecyclerView.setLayoutManager(mLayoutManager);
+                    mRecyclerView.setAdapter(mAdapter);
+                }
+                else{
+                    showToast("Error");
+                }
+            }
+        });
+
+        //-----------------------------------------------------------------------------------------//
 
 
 
