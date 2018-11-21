@@ -32,6 +32,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+
 public class SalesFragment extends Fragment {
 
     private LinearLayout searchLayout;
@@ -44,12 +46,18 @@ public class SalesFragment extends Fragment {
     private FirebaseFirestore db;
     private DatabaseReference clientsDatabase;
     private CollectionReference clientsReference;
+    private CollectionReference productsReference;
 
     private TextView name, lastName, rut;
 
     private static final String TAG = "GETTING CLIENT BY RUT";
 
     private boolean userFound=false;
+
+    private ArrayList<ProductItem> mExampleList;
+    private RecyclerView mRecyclerView;
+    private ProductAdapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
 
 
@@ -78,6 +86,51 @@ public class SalesFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
         clientsReference = db.collection("clients");
+        productsReference = db.collection("product");
+
+        mRecyclerView = rootView.findViewById(R.id.my_recycler_view);
+
+        //-----------------------------------CARGAR PRODUCTOS--------------------------------------//
+
+        Query productsQuery = productsReference.orderBy("nombre");
+
+
+        productsQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                mExampleList = new ArrayList<>();
+
+                if(task.isSuccessful()){
+
+                    showToast("Buscando productos");
+
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Log.d(TAG, "PRODUCTO ENCONTRADO" + " => " + document.getData());
+                        mExampleList.add(
+                                new ProductItem(
+                                        R.drawable.ic_launcher_background,
+                                        document.getString("nombre"), document.getLong("precio").toString()));
+                    }
+
+                    //createExampleList();
+
+                    mRecyclerView.setHasFixedSize(true);
+                    mLayoutManager = new LinearLayoutManager(getContext());
+                    mAdapter = new ProductAdapter(mExampleList);
+
+                    mRecyclerView.setLayoutManager(mLayoutManager);
+                    mRecyclerView.setAdapter(mAdapter);
+                }
+                else{
+                    showToast("Error");
+                }
+            }
+        });
+
+        //-----------------------------------------------------------------------------------------//
+
+
 
         sellingLayout.setVisibility(View.GONE);
         //expandableLinearLayout.initLayout(); // Recalculate size of children
@@ -128,7 +181,7 @@ public class SalesFragment extends Fragment {
         selectClient.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(userFound == true){
+                if(userFound){
                     searchLayout.setVisibility(View.GONE);
                     sellingLayout.setVisibility(View.VISIBLE);
                 }
@@ -146,7 +199,27 @@ public class SalesFragment extends Fragment {
         Toast.makeText(getContext(),message,Toast.LENGTH_LONG).show();
     }
 
-
+    private void createExampleList() {
+        mExampleList = new ArrayList<>();
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "One", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "Two", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "Three", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "Four", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "Five", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "Six", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "Seven", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "Eight", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "Nine", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "One", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "Two", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "Three", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "Four", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "Five", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "Six", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "Seven", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "Eight", "Line 2"));
+        mExampleList.add(new ProductItem(R.drawable.ic_launcher_background, "Nine", "Line 2"));
+    }
 
 
 }
