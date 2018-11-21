@@ -23,7 +23,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".Register" />
-        <activity android:name=".CrearCuenta"></activity>
+        <activity android:name=".CrearCuenta" />
+        <activity android:name=".RealizarPago" />
+        <activity
+            android:name=".AgregarDeuda"
+            android:label="@string/title_activity_agregar_deuda"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
